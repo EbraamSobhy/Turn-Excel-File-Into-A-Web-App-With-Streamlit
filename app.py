@@ -21,7 +21,7 @@ df_participants = pd.read_excel(excel_file,
                                 header=3)
 df_participants.dropna(inplace=True)
 
-# --- STREAMLIT SELECTION
+# STREAMLIT SELECTION
 department = df['Department'].unique().tolist()
 ages = df['Age'].unique().tolist()
 
@@ -34,17 +34,17 @@ department_selection = st.multiselect('Department:',
                                         department,
                                         default=department)
 
-# --- FILTER DATAFRAME BASED ON SELECTION
+# FILTER DATAFRAME BASED ON SELECTION
 mask = (df['Age'].between(*age_selection)) & (df['Department'].isin(department_selection))
 number_of_result = df[mask].shape[0]
 st.markdown(f'*Available Results: {number_of_result}*')
 
-# --- GROUP DATAFRAME AFTER SELECTION
+# GROUP DATAFRAME AFTER SELECTION
 df_grouped = df[mask].groupby(by=['Rating']).count()[['Age']]
 df_grouped = df_grouped.rename(columns={'Age': 'Votes'})
 df_grouped = df_grouped.reset_index()
 
-# --- PLOT BAR CHART
+# PLOT BAR CHART
 bar_chart = px.bar(df_grouped,
                         x='Rating',
                         y='Votes',
@@ -53,7 +53,7 @@ bar_chart = px.bar(df_grouped,
                         template= 'plotly_white')
 st.plotly_chart(bar_chart)
 
-# --- DISPLAY IMAGE & DATAFRAME
+# DISPLAY IMAGE & DATAFRAME
 col1, col2 = st.columns(2)
 image = Image.open('images/survey.jpg')
 col1.image(image,
@@ -61,7 +61,7 @@ col1.image(image,
         use_column_width=True)
 col2.dataframe(df[mask])
 
-# --- PLOT PIE CHART
+# PLOT PIE CHART
 pie_chart = px.pie(df_participants,
                 title='Total No. of Participants',
                 values='Participants',
